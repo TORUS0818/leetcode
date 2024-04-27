@@ -117,3 +117,35 @@ class Solution:
 思考ログ：
 - Step1でスピード自体は大丈夫そうだったので、この問題は1回だけやって終了
 - 141でご指摘頂いた点を加味して書いてみた
+
+# Step4
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        fast = head
+        slow = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                break
+        else:
+            return None
+        
+        slow_1 = head
+        slow_2 = fast
+        while slow_1 != slow_2:
+            slow_1 = slow_1.next
+            slow_2 = slow_2.next
+        return slow_1
+```
+修正ポイント：
+- ネストが深いと読みにくいので、適度にコードを区切る癖をつける
+- while-elseを活用してシンプルなコードにする
