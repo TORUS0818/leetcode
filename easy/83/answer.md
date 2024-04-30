@@ -54,6 +54,7 @@ current = current.next
 参考にした過去ログなど：
 - https://discordapp.com/channels/1084280443945353267/1228896007279083653/1231816299718381649
 - https://leetcode.com/problems/remove-duplicates-from-sorted-list/solutions/2892275/python3-o-n-beats-95-80-41-ms-simple-with-explanation/
+- https://discordapp.com/channels/1084280443945353267/1227073733844406343/1233666371368390657
 
 ```python
 # Definition for singly-linked list.
