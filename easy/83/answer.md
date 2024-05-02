@@ -120,5 +120,21 @@ class Solution:
 # Step4
 
 ```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        current = head
+        while current:
+            if current.next and current.val == current.next.val:
+                current.next = current.next.next
+            else:
+                current = current.next
+        return head
 ```
 思考ログ：
+- 最初のheadの確認だけ切り出さずに全部まとめてやる方法で実装
+- ```while```の条件が今現在注目している```current```の状態を追う形式なので（Step3では```current.next```）確かにこちらの方が自然かなと思えた
