@@ -246,3 +246,35 @@ class Solution:
 - early-returnができないか、考える
 - ノードを飛ばす時の処理という括りでif文をまとめた
     - これは可読性の観点からは分けといても良かったかもしれない
+
+while一回版の書き直し（新しいオブジェクト使わないパターン）
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummy_node = ListNode(-1, head)
+        prev_node = dummy_node
+        node = head
+        duplicated_val = None
+        while node:
+            if node.next and node.val == node.next.val:
+                duplicated_val = node.val
+                node = node.next
+                continue
+            if node.val == duplicated_val:
+                node = node.next
+                continue
+            
+            prev_node.next = node
+            prev_node = prev_node.next
+            node = node.next
+        
+        prev_node.next = node
+        return dummy_node.next
+```
+思考ログ：
+- ここもcontinueし忘れてif-elseのでっかい塊を作りがちなので注意
