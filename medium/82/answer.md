@@ -218,3 +218,31 @@ class Solution:
 ```
 思考ログ：
 - なるべくシンプルに意味のある名前をつけることを心がける
+
+再帰の実装の見直し
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # 13:26
+        def delete_duplicates_helper(head, duplicated_value):
+            if not head:
+                return head
+
+            if (head.next and head.val == head.next.val) or \
+            (head.val == duplicated_value):
+                return delete_duplicates_helper(head.next, head.val)
+            
+            head.next = delete_duplicates_helper(head.next, None)
+            return head
+
+        return delete_duplicates_helper(head, None)
+```
+思考ログ：
+- early-returnができないか、考える
+- ノードを飛ばす時の処理という括りでif文をまとめた
+    - これは可読性の観点からは分けといても良かったかもしれない
