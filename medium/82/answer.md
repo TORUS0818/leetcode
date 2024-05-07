@@ -189,6 +189,32 @@ class Solution:
 
 # Step4
 
+変数名を修正
 ```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # 10:41
+        dummy_node = ListNode(-1, head)
+        prev_node = dummy_node
+        node = head
+        while node and node.next:
+            if node.val != node.next.val:
+                prev_node = prev_node.next
+                node = node.next
+                continue
+            
+            while node.next and node.val == node.next.val:
+                node = node.next
+            
+            prev_node.next = node.next
+            node = node.next
+        
+        return dummy_node.next
 ```
 思考ログ：
+- なるべくシンプルに意味のある名前をつけることを心がける
