@@ -188,6 +188,24 @@ class Solution:
 
 # Step4
 
+```node```と```reversed_node_head```のコンタミの解消
 ```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        node = head
+        reversed_node_head = None
+        while node:
+            node_next = node.next
+            reversed_node_next = reversed_node_head
+            node.next = reversed_node_next
+            reversed_node_head = node
+            node = node_next
+        return reversed_node_head
 ```
 思考ログ：
+- 少し冗長にして処理を追いやすくする選択肢も一考
