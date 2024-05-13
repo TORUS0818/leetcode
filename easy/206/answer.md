@@ -209,3 +209,27 @@ class Solution:
 ```
 思考ログ：
 - 少し冗長にして処理を追いやすくする選択肢も一考
+
+再帰の実装、ヘルパー関数を用意して返り値を2つにする方法
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        def reverse_list_helper(node: Optional[ListNode]):
+            if not (node and node.next):
+                return node, node
+
+            reversed_tail, reversed_head = reverse_list_helper(node.next)
+            reversed_tail.next = node
+            node.next = None
+            return node, reversed_head
+        
+        _, reversed_head = reverse_list_helper(head)
+        return reversed_head
+```
+思考ログ：
+- こちらの方が自然に感じるし、実装もスムーズだった
