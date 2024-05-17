@@ -195,7 +195,7 @@ if __name__ == "__main__":
     print(my_heap.heap_array)  # [1, 2, 3, 5, 4, 6, 7]
 
     # 他の配列をセットし直す
-    my_heap.replace_array([7, 6, 5, 4, 3, 2, 1])
+    my_heap.replace_heap_array([7, 6, 5, 4, 3, 2, 1])
     print(my_heap.heap_array)  # [1, 3, 2, 4, 6, 7, 5]
 
     # pop
