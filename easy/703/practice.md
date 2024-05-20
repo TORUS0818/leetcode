@@ -3,6 +3,8 @@
 # Step1
 色々見た実装を思い出しながら書いてみた
 ```python
+from typing import Optional
+
 class MyHeap:
     def __init__(self, array: list = []):
         self.replace_array(array)
@@ -45,7 +47,7 @@ class MyHeap:
         if parent_index > 0:
             self._shift_down(parent_index)
 
-    def _get_min_child_index(self, parent_index: int) -> int:
+    def _get_min_child_index(self, parent_index: int) -> Optional[int]:
         if not self._has_child(parent_index):
             return None
         
@@ -102,6 +104,8 @@ if __name__ == '__main__':
 # Step2
 
 ```python
+from typing import Optional
+
 class MyHeap:
     def __init__(self, array: list = []):
         self.heap_array = []
@@ -149,7 +153,7 @@ class MyHeap:
     def _get_parent_index(self, child_index: int) -> int:
         return (child_index - 1) // 2
 
-    def _get_smaller_child_index(self, parent_index: int) -> int:
+    def _get_smaller_child_index(self, parent_index: int) -> Optional[int]:
         if not self._has_child(parent_index):
             return None
 
@@ -165,12 +169,12 @@ class MyHeap:
 
         return smaller_child_index
 
-    def _get_left_child_index(self, parent_index: int) -> int:
+    def _get_left_child_index(self, parent_index: int) -> Optional[int]:
         if not self._has_left_child(parent_index):
             return None
         return 2 * parent_index + 1
 
-    def _get_right_child_index(self, parent_index: int) -> int:
+    def _get_right_child_index(self, parent_index: int) -> Optional[int]:
         if not self._has_right_child(parent_index):
             return None
         return 2 * parent_index + 2
