@@ -138,13 +138,13 @@ class MyHeap:
             self._swap(smaller_child_index, parent_index)
         self._sift_up(smaller_child_index)
 
-    def _shift_down(self, child_index: int) -> None:
+    def _sift_down(self, child_index: int) -> None:
         parent_index = self._get_parent_index(child_index)
         if self.heap_array[child_index] < self.heap_array[parent_index]:
             self._swap(child_index, parent_index)
 
         if parent_index > 0:
-            self._shift_down(parent_index)
+            self._sift_down(parent_index)
 
     def _get_parent_index(self, child_index: int) -> int:
         return (child_index - 1) // 2
