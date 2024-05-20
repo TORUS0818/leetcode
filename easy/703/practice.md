@@ -158,7 +158,7 @@ class MyHeap:
 
         smaller_child_index = left_child_index
         if (
-            not right_child_index
+            right_child_index
             and self.heap_array[right_child_index] < self.heap_array[left_child_index]
         ):
             smaller_child_index = right_child_index
