@@ -183,7 +183,47 @@ class Solution:
 
 # Step4
 
+かかった時間：10min
+
+https://github.com/TORUS0818/leetcode/pull/12#discussion_r1623243567
+を受けて
 ```python
+import heapq
+
+
+class Solution:
+    def kSmallestPairs(self, nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
+        # 9:59 >> 10:10
+        def _is_addible(index1: int, index2: int) -> bool:
+            if index1 >= len(nums1) or index2 >= len(nums2):
+                return False
+            if index1 == 0 or index2 == 0:
+                return True
+            return (index1 - 1, index2) in added and (index1, index2 - 1) in added
+
+        def _add_to_candidates_if_necessary(index1: int, index2: int) -> None:
+            if _is_addible(index1, index2):
+                heapq.heappush(
+                    candidates,
+                    (nums1[index1] + nums2[index2], index1, index2)
+                )
+
+        k_smallest_pairs = []
+        added = set()
+        candidates = [(nums1[0] + nums2[0], 0, 0)]
+        while len(k_smallest_pairs) < k:
+            _, index1, index2 = heapq.heappop(candidates)
+            k_smallest_pairs.append([nums1[index1], nums2[index2]])
+            added.add((index1, index2))
+            _add_to_candidates_if_necessary(index1 + 1, index2)
+            _add_to_candidates_if_necessary(index1, index2 + 1)
+        
+        return k_smallest_pairs
 ```
 思考ログ：
 
+# Step5
+
+```python
+```
+思考ログ：
