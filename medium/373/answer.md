@@ -224,6 +224,91 @@ class Solution:
 
 # Step5
 
+かかった時間：16min
+
+- odaさんからの提案
+https://github.com/TORUS0818/leetcode/pull/12#discussion_r1623146530
+- liquo-riceさんからのヒント（解答）
+https://github.com/TORUS0818/leetcode/pull/12#discussion_r1623354548
+
+上記を受けて再実装
+```python
+import heapq
+
+
+class Solution:
+    def kSmallestPairs(self, nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
+        k_smallest_pairs = []
+        candidates = [(nums1[0] + nums2[0], 0, 0)]
+        next_index1 = [0] * len(nums2)
+        next_index2 = [0] * len(nums1)
+        while len(k_smallest_pairs) < k:
+            _, index1, index2 = heapq.heappop(candidates)
+            k_smallest_pairs.append([nums1[index1], nums2[index2]])
+            next_index1[index2] += 1
+            next_index2[index1] += 1
+            if index1 + 1 < len(nums1) and index2 == next_index2[index1 + 1]:
+                heapq.heappush(
+                    candidates, 
+                    (nums1[index1 + 1] + nums2[index2], index1 + 1, index2)
+                )
+            if index2 + 1 < len(nums2) and index1 == next_index1[index2 + 1]:
+                heapq.heappush(
+                    candidates, 
+                    (nums1[index1] + nums2[index2 + 1], index1, index2 + 1)
+                )
+        return k_smallest_pairs
+```
+思考ログ：
+- 理解はできたが、頭の使い方に混乱する、、
+    - といいつつ、全部やってることは同じ（如何に無駄なく右下を候補に加えるか）なのでそこさえ分かれば 、、
+    - シンプルに書けるし、setで管理する必要もなくなるので良いかなと思いつつ
+    - ぱっと見で分かりやすい処理なのかと言われると？
+        - 自分が未熟が故そう感じるのか？界隈では割と常識的な手続きなのだろうか
+- 簡単にまとめる
+    - 基本のアイデアは今までと一緒、最小のペアを取り出してその右か下を候補に追加したい
+    - 以下、右を候補に追加できるか、の例に限定してシミュレーションする（*は答えに追加済み、@が現在地、+が次候補とする）
+        - パターン１
+          ```
+          * * * *
+          * * * 
+          * * @ +
+          * * * 
+          ``` 
+        - パターン2 <br>
+          ```
+          * * * *
+          * * * *
+          * * @ *(+)
+          * * * *
+          ```
+        - パターン3
+          ```
+          * * * *
+          * * * *
+          * * @ +
+          * * *
+          ```
+        - パターン1では候補に追加はできるものの、それが選ばれる前に答えに追加されるべき箇所が存在する（+の真上）
+        - パターン2ではもう既に答えに追加されているので、また追加したら重複が生じてしまう
+        - パターン3が候補として入れるべき状態
+  - 以上をどう検知するかという話
+      - 行、列ごとに答えとして何ペア入れたかの実績を記録しておく
+        ```
+        * * * * 4
+        * * * * 4
+        * * @ + 4
+        * * *   3
+        4 4 4 2
+        ```
+      - +の位置が、今回の例なら上から2+1=3番目であれば候補に入れられる
+          - 何故か
+              - 原則を思い出すと、自分の左と上は必ず先に答えにいる、というものがあった
+              - +から見て左は@でもう答えに移動しているからOK
+              - +の上が問題だが、履歴を確認すると、この列は+の現在地3行目の一個手前の行まで答えに入っていることがわかるからOK
+
+# Step6
+
 ```python
 ```
 思考ログ：
