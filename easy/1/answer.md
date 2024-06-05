@@ -83,7 +83,15 @@ class Solution:
 
 # Step4
 
+2重ループの無駄な処理（```i!=j```比較）部分を修正
 ```python
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        for i in range(len(nums)):
+            for j in range(i + 1, len(nums)):
+                if nums[i] + nums[j] == target:
+                    return [i, j]
+        raise Exception('unreachable')
 ```
 思考ログ：
 
