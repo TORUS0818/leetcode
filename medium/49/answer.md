@@ -14,6 +14,7 @@ max(strs[i].length) = Mとして
 ```python
 from collections import defaultdict
 
+
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         group_to_strs = defaultdict(list)
@@ -77,6 +78,7 @@ itertools.groupbyを使ってみる
 ```python
 from itertools import groupby
 from collections import defaultdict
+
 
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
