@@ -179,7 +179,22 @@ class Solution:
 
 # Step4
 
+findを使う方法
 ```python
+class Solution:
+    def numUniqueEmails(self, emails: List[str]) -> int:
+        unique_email_address = set()
+        for email in emails:
+            local_part, domain_part = email.rsplit('@', maxsplit=1)
+            
+            index_of_plus = local_part.find('+')
+            if index_of_plus != -1:
+                local_part = local_part[:index_of_plus]
+            local_part = local_part.replace('.', '')
+            
+            unique_email_address.add(f'{local_part}@{domain_part}')
+        
+        return len(unique_email_address)
 ```
 思考ログ：
-
+- 無駄なfindをしない
