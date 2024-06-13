@@ -198,3 +198,53 @@ class Solution:
 ```
 思考ログ：
 - 無駄なfindをしない
+
+一文字ずつ処理していく方法
+```python
+class Solution:
+    def numUniqueEmails(self, emails: List[str]) -> int:
+        def normalize(email: str) -> str:
+            i = 0
+            is_local_part = True
+            is_ignored_part = False
+            normalized_chars = []
+            # local part
+            while is_local_part and not is_ignored_part:
+                c = email[i]
+                if c == '+':
+                    is_ignored_part = True
+                    i += 1
+                    continue
+                if c == '.':
+                    i += 1
+                    continue
+                if c == '@':
+                    is_local_part = False
+                normalized_chars.append(c)
+                i += 1
+            # ignored local part
+            while is_local_part and is_ignored_part:
+                c = email[i]
+                if c == '@':
+                    is_local_part = False
+                    normalized_chars.append(c)
+                i += 1
+            # domain part
+            while i < len(email):    
+                c = email[i]
+                normalized_chars.append(c)
+                i += 1
+            
+            return ''.join(normalized_chars)
+        
+        return len(set(map(normalize, emails)))
+```
+思考ログ：
+- 変数命名の修正
+- 処理をlocal part, ignored local part, domain partの複数ループに変更
+
+# Step5
+
+```python
+```
+思考ログ：
