@@ -294,9 +294,74 @@ class Solution:
 - 途中で詰まる感じもなく同じものを再現できるが、書くのにそこそこ時間はかかってしまう
   - 皆さん、5分くらいで書いてるイメージだが
 
+コメントを受けて、UnionFindの実装を整理
 # Step4
+
+```python
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        WATER = 0
+        LAND = 1
+        
+        class UnionFind():
+            def __init__(self, n: int):
+                self.n = n
+                self.parents = list(range(n))
+                self.sizes = [1] * n
+            
+            def find(self, i: int) -> int:
+                if self.parents[i] == i:
+                    return i
+                self.parents[i] = self.find(self.parents[i])
+                return self.parents[i]
+
+            def union(self, i: int, j: int):
+                root_i = self.find(i)
+                root_j = self.find(j)
+                if root_i == root_j:
+                    return
+                self.parents[root_i] = root_j
+                self.sizes[root_j] += self.sizes[root_i]
+
+            def size(self, i: int) -> int:
+                return self.sizes[self.find(i)]
+
+        def convert_grid_position_to_index(h: int, w: int) -> int:
+            return h * width + w
+
+        def is_valid_position(h: int, w: int) -> bool:
+            return 0 <= h < height and 0 <= w < width and grid[h][w] == LAND
+
+        height = len(grid)
+        width = len(grid[0])
+        uf = UnionFind(height * width)
+        max_area = 0
+        for h in range(height):
+            for w in range(width):
+                if grid[h][w] == WATER:
+                    continue
+                if is_valid_position(h, w + 1):    
+                    uf.union(
+                        convert_grid_position_to_index(h, w),
+                        convert_grid_position_to_index(h, w + 1)
+                    )
+                if is_valid_position(h + 1, w):    
+                    uf.union(
+                        convert_grid_position_to_index(h, w),
+                        convert_grid_position_to_index(h + 1, w)
+                    )
+                max_area = max(
+                    max_area, 
+                    uf.size(convert_grid_position_to_index(h, w))
+                )
+        
+        return max_area
+```
+思考ログ：
+- 特になし
+
+# Step5
 
 ```python
 ```
 思考ログ：
-
