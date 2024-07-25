@@ -157,6 +157,39 @@ class Solution:
 # Step4
 
 ```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        def is_leaf(node: TreeNode) -> bool:
+            return not node.left and not node.right    
+
+        node_remain_pairs = [(root, targetSum)]
+        while node_remain_pairs:
+            node, remain = node_remain_pairs.pop()
+            if not node:
+                continue
+
+            remain -= node.val
+            if is_leaf(node) and remain == 0:
+                return True
+            
+            node_remain_pairs.append((node.left, remain))
+            node_remain_pairs.append((node.right, remain))
+        
+        return False
 ```
 思考ログ：
+- コメントをもとに試行錯誤したが、この形に落ち着いた
+    - 入り口の```root```チェックを除外
+    - ```is_leaf```のnodeの型のOptionalを除外
 
+# Step5
+
+```python
+```
+思考ログ：
