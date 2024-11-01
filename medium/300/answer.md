@@ -216,7 +216,118 @@ class Solution:
 
 # Step4
 
+セグ木を再度実装
 ```python
+class SegTree:
+    def __init__(self, n: int):
+        leaf_n = 1
+        while leaf_n < n:
+            leaf_n *= 2
+        self.leaf_n = leaf_n
+        # 1-indexed tree
+        self.tree = [0] * (2 * leaf_n)
+    
+    def update(self, seg_i: int, val: int) -> None:
+        assert 0 <= seg_i < self.leaf_n, f'seg_i is out of index. seg_i: {seg_i}'
+        
+        tree_i = seg_i + self.leaf_n
+        self.tree[tree_i] = val
+        while tree_i > 1:
+            tree_i //= 2
+            self.tree[tree_i] = max(self.tree[2 * tree_i], self.tree[2 * tree_i + 1])
+
+    def query(self, start_seg_i: int, end_seg_i: int) -> int:
+        assert 0 <= start_seg_i < self.leaf_n, f'start_seg_i is out of index. start_seg_i: {start_seg_i}'
+        assert start_seg_i <= end_seg_i <= self.leaf_n, f'end_seg_i is out of index. end_seg_i: {end_seg_i}'
+        
+        tree_l = start_seg_i + self.leaf_n
+        tree_r = end_seg_i + self.leaf_n
+        result = 0
+        while tree_l < tree_r:
+            if tree_l % 2:
+                result = max(result, self.tree[tree_l])
+                tree_l += 1
+            if tree_r % 2:
+                tree_r -= 1
+                result = max(result, self.tree[tree_r])
+            tree_l //= 2
+            tree_r //= 2
+        
+        return result
+    
+    def get_maximum_val_of_all_segments(self):
+        return self.tree[1]
+
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        def compress(nums: list[int]) -> list[int]:  
+            num_to_compressed_num = {}
+            for i, num in enumerate(sorted(set(nums))):
+                num_to_compressed_num[num] = i
+            
+            compressed_num = [num_to_compressed_num[num] for num in nums]
+            return compressed_num
+
+        compressed_num = compress(nums)
+        n = len(set(compressed_num))
+        st = SegTree(n)
+        for i, num in enumerate(compressed_num):
+            res = st.query(0, num)
+            st.update(num, res + 1)
+        
+        return st.get_maximum_val_of_all_segments()
 ```
 思考ログ：
+- 以下アップデートしました。
+    - 単位元は直接0で初期化するように変更(汎用的な実装でもないので)
+    - 計算をシンプルにするために内部のtreeの配列は1-indexedにした
+        - セグメントの値や区間指定は0-indexedのままにしている
+        - 使う側は内部の1-indexedを意識しないでいいように（treeにはアクセスしないでいいように）敢えて```get_maximum_val_of_all_segments```を実装した
+    - ```query```のバグを修正
+        - 道中計算が必要になったlとrは微調整をしないといけないことに気づいていなかった
+        - セグメント[0], [1]で[1]を採用した場合、次は[2]以降を考えないといけないのにその親[0, 1]に遷移してしまっていた
+- ビット演算ver
+    - ビット演算と（完全）二分木のノード移動をまとめておく（1-indexed配列）
+        - 自分のインデックスを```i```として
+        - 親：```i >> 1```
+        - 兄弟：```i ^ 1```
+        - 左の子：```i << 1 | 0```
+        - 右の子：```i << 1 | 1```
+    - なぜ1との排他的論理和で兄弟？
+        - 自分が偶数のインデックスの時は相手は一つ大きい奇数、自分が奇数のインデックスの時は相手は一つ小さい偶数
+        - 自分が偶数の時最下位ビットは0、^1を取ると最下位ビットは1になる（一つ大きい奇数）
+        - 自分が奇数の時最下位ビットは1、^1を取ると最下位ビットは0になる（一つ小さい偶数）
+```python
+def update(self, seg_i: int, val: int) -> None:
+    assert 0 <= seg_i < self.leaf_n, f'seg_i is out of index. seg_i: {seg_i}'
+    
+    tree_i = seg_i + self.leaf_n
+    self.tree[tree_i] = val
+    while tree_i > 1:
+        tree_i >>= 1
+        self.tree[tree_i] = max(self.tree[tree_i << 1 | 0], self.tree[tree_i << 1 | 1])
 
+def query(self, start_seg_i: int, end_seg_i: int) -> int:
+    assert 0 <= start_seg_i < self.leaf_n, f'start_seg_i is out of index. start_seg_i: {start_seg_i}'
+    assert start_seg_i <= end_seg_i <= self.leaf_n, f'end_seg_i is out of index. end_seg_i: {end_seg_i}'
+    
+    tree_l = start_seg_i + self.leaf_n
+    tree_r = end_seg_i + self.leaf_n
+    result = 0
+    while tree_l < tree_r:
+        if tree_l & 1:
+            result = max(result, self.tree[tree_l])
+            tree_l += 1
+        if tree_r & 1:
+            tree_r -= 1
+            result = max(result, self.tree[tree_r])
+        tree_l >>= 1
+        tree_r >>= 1
+    
+    return result
+```
+
+```python
+```
+
+思考ログ：
