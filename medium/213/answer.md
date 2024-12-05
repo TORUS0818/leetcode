@@ -172,6 +172,32 @@ class Solution:
 # Step4
 
 ```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        if len(nums) <= 1:
+            return nums[0]
+        
+        def _rob_in_line(start: int, stop: int) -> int:
+            assert 0 <= start < stop <= len(nums)
+            max_money_skipped_last = 0
+            max_money_robbed_last = 0
+            for i in range(start, stop):
+                max_money_skipped = max(max_money_skipped_last, max_money_robbed_last)
+                max_money_robbed = nums[i] + max_money_skipped_last
+                max_money_skipped_last = max_money_skipped
+                max_money_robbed_last = max_money_robbed
+            
+            return max(max_money_skipped_last, max_money_robbed_last)
+        
+        return max(_rob_in_line(0, len(nums) - 1), _rob_in_line(1, len(nums)))
 ```
 思考ログ：
+- コメントを受けてStep3を修正
+    - 半開区間だということが伝わりやすいように変数名を```start```, ```stop```に
+    - 最大金額の更新部分を自然なforループに変更
+ 
+# Step5
 
+```python
+```
+思考ログ：
